@@ -80,7 +80,9 @@ jobs:
       - env:
           QUAY_NAMESPACE: ${{ secrets.QUAY_USERNAME }}
         run: |
-          docker buildx imagetools create \
-            --tag quay.io/${QUAY_NAMESPACE%%+*}/${{ github.event.repository.name }}:${{ github.ref_name }} \
-            --tag quay.io/${QUAY_NAMESPACE%%+*}/${{ github.event.repository.name }}:latest \
-            ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+          skopeo copy --all \
+            docker://ghcr.io/${{ github.repository }}:${{ github.ref_name }} \
+            docker://quay.io/${QUAY_NAMESPACE%%+*}/${{ github.event.repository.name }}:${{ github.ref_name }}
+          skopeo copy --all \
+            docker://ghcr.io/${{ github.repository }}:${{ github.ref_name }} \
+            docker://quay.io/${QUAY_NAMESPACE%%+*}/${{ github.event.repository.name }}:latest
