@@ -34,8 +34,8 @@ jobs:
           build-args: TFLINT_VERSION=${{ github.event.inputs.version }}
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}:${{ github.event.inputs.version }}
-            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/its-me/tflint:${{ github.event.inputs.version }}
+            ghcr.io/its-me/tflint:latest
 
   tag:
     name: Create git tag
@@ -74,9 +74,9 @@ jobs:
 
       - run: |
           docker buildx imagetools create \
-            --tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:${{ github.event.inputs.version }} \
-            --tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}:latest \
-            ghcr.io/${{ github.repository }}:${{ github.event.inputs.version }}
+            --tag ${{ secrets.DOCKERHUB_USERNAME }}/tflint:${{ github.event.inputs.version }} \
+            --tag ${{ secrets.DOCKERHUB_USERNAME }}/tflint:latest \
+            ghcr.io/its-me/tflint:${{ github.event.inputs.version }}
 
   push-quay:
     name: Push to Quay
@@ -103,6 +103,6 @@ jobs:
           QUAY_NAMESPACE: ${{ secrets.QUAY_USERNAME }}
         run: |
           docker buildx imagetools create \
-            --tag quay.io/${QUAY_NAMESPACE%%+*}/${{ github.event.repository.name }}:${{ github.event.inputs.version }} \
-            --tag quay.io/${QUAY_NAMESPACE%%+*}/${{ github.event.repository.name }}:latest \
-            ghcr.io/${{ github.repository }}:${{ github.event.inputs.version }}
+            --tag quay.io/${QUAY_NAMESPACE%%+*}/tflint:${{ github.event.inputs.version }} \
+            --tag quay.io/${QUAY_NAMESPACE%%+*}/tflint:latest \
+            ghcr.io/its-me/tflint:${{ github.event.inputs.version }}
